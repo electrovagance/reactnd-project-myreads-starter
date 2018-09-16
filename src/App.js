@@ -26,13 +26,13 @@ class BooksApp extends React.Component {
     })
   }
 
-  updateShelf = (reassignedShelf, selectedBook) => {
+  updateShelf = (newShelf, selectedBook) => {
     this.setState((state) => ({
       // map over current state of books to find the changed one
       // if the changed one has been found, replace the shelf property with the new one
       books: state.books.map(b => {
         if (b === selectedBook) {
-          b.shelf = reassignedShelf
+          b.shelf = newShelf
         } 
         return b;
       })
@@ -45,11 +45,17 @@ class BooksApp extends React.Component {
     })
   }
 
+  addNewBook = (bookToAdd) => {
+    this.setState((state) => {
+      books: state.books.push(bookToAdd)
+    })
+  }
+
   render() {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <SearchBooksBar updateShelf={this.updateShelf} books={this.state.books}/>
+          <SearchBooksBar addNewBook={this.addNewBook} books={this.state.books} showSearchPage={this.state.showSearchPage}/>
         ) : (
           <div className="list-books">
             <MyReadsHeader/>

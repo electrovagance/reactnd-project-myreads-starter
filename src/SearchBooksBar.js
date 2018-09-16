@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 
 class SearchBooksBar extends Component {
     state = {
-        showSearchPage: ''
+        query: ''
+    }
+
+    updateQuery = (query) => {
+        this.setState({ query: query.trim() })
     }
 
     render() {
-        let { books, updateShelf } = this.props;
+        let { books, addNewBook, showSearchPage } = this.props;
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -20,8 +24,13 @@ class SearchBooksBar extends Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                        <input type="text" placeholder="Search by title or author" />
-
+                {JSON.stringify(this.state)}
+                        <input 
+                            type="text" 
+                            placeholder="Search by title or author"
+                            value={this.state.query}
+                            onChange={(event) => this.updateQuery(event.target.value)} 
+                            />
                     </div>
                 </div>
                 <div className="search-books-results">
@@ -32,7 +41,7 @@ class SearchBooksBar extends Component {
                                     <div className="book-top">
                                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: "url(" + book.imageLinks.thumbnail + ")" }}></div>
                                         <div className="book-shelf-changer">
-                                            <select onChange={event => updateShelf(event.target.value, book)} value={book.shelf}>
+                                            <select onChange={event => addNewBook(book)} value={book.shelf}>
                                                 <option value="move" disabled>Move to...</option>
                                                 <option value="currentlyReading">Currently Reading</option>
                                                 <option value="wantToRead">Want to Read</option>
