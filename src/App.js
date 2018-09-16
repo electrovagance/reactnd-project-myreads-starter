@@ -27,12 +27,6 @@ class BooksApp extends React.Component {
     })
   }
 
-  // changeShelf = (book) => {
-  //   this.setState((state) => ({ 
-  //     books: state.books.push(book)}))
-  //   console.log(this.state.books)
-  //   }
-
   updateShelf = (reassignedShelf, selectedBook) => {
     this.setState((state) => ({
       // map over current state of books to find the changed one
@@ -46,6 +40,12 @@ class BooksApp extends React.Component {
     }))
   }
 
+  deleteBook = (bookToDelete) => {
+    this.setState((state) => {
+      books: state.books.filter((b) => b !== bookToDelete)
+    })
+  }
+
   render() {
     return (
       <div className="app">
@@ -55,9 +55,9 @@ class BooksApp extends React.Component {
           <div className="list-books">
             <MyReadsHeader/>
             <div className="list-books-content">
-              <CurrentlyReading updateShelf={this.updateShelf} books={this.state.books}/>
-              <WantToRead updateShelf={this.updateShelf} books={this.state.books}/>
-              <Read updateShelf={this.updateShelf} books={this.state.books}/>
+              <CurrentlyReading updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books}/>
+              <WantToRead updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books}/>
+              <Read updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books}/>
             </div>
             {/* TODO: Add */}
               <div className="open-search">

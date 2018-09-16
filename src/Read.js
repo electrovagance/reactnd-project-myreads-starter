@@ -6,7 +6,7 @@ class Read extends Component {
     }
 
     render() {
-        let { books, updateShelf } = this.props;
+        let { books, updateShelf, deleteBook } = this.props;
         let showingBooks = '';
         showingBooks = books.filter((book) => book.shelf === 'read')
         books = showingBooks;
@@ -22,12 +22,12 @@ class Read extends Component {
                                     <div className="book-top">
                                         <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: "url(" + book.imageLinks.thumbnail + ")"  }}></div>
                                         <div className="book-shelf-changer">
-                                            <select onChange={(event) => updateShelf(event.target.value, book)} value={book.shelf}>
+                                            <select onChange={event => updateShelf(event.target.value, book)} value={book.shelf}>
                                                 <option value="move" disabled>Move to...</option>
                                                 <option value="currentlyReading">Currently Reading</option>
                                                 <option value="wantToRead">Want to Read</option>
                                                 <option value="read">Read</option>
-                                                <option value="none">None</option>
+                                                <option value="none" onClick={deleteBook(book)}>None</option>
                                             </select>
                                         </div>
                                     </div>
