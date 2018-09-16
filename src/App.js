@@ -1,13 +1,12 @@
-import React from 'react'
-// import * as BooksAPI from './BooksAPI'
-import './App.css'
-import SearchBooksBar from './SearchBooksBar'
-import MyReadsHeader from './MyReadsHeader'
-import CurrentlyReading from './CurrentlyReading'
-import WantToRead from './WantToRead'
-import Read from './Read'
-import * as BooksAPI from './BooksAPI'
-// import AddBookButton from './AddBookButton'
+import React from 'react';
+import './App.css';
+import SearchBooksBar from './SearchBooksBar';
+import MyReadsHeader from './MyReadsHeader';
+import CurrentlyReading from './CurrentlyReading';
+import WantToRead from './WantToRead';
+import Read from './Read';
+import * as BooksAPI from './BooksAPI';
+// import AddBookButton from './AddBookButton';
 
 class BooksApp extends React.Component {
   state = {
@@ -32,7 +31,7 @@ class BooksApp extends React.Component {
       // map over current state of books to find the changed one
       // if the changed one has been found, replace the shelf property with the new one
       books: state.books.map(b => {
-        if (b == selectedBook) {
+        if (b === selectedBook) {
           b.shelf = reassignedShelf
         } 
         return b;
@@ -50,7 +49,7 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <SearchBooksBar/>
+          <SearchBooksBar updateShelf={this.updateShelf} books={this.state.books}/>
         ) : (
           <div className="list-books">
             <MyReadsHeader/>
@@ -59,10 +58,10 @@ class BooksApp extends React.Component {
               <WantToRead updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books}/>
               <Read updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books}/>
             </div>
-            {/* TODO: Add */}
               <div className="open-search">
                 <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
               </div>
+            {/* <AddBookButton showSearchPage={this.state.showSearchPage}/> */}
           </div>
         )}
       </div>
