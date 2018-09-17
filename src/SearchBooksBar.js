@@ -1,20 +1,52 @@
 import React, { Component } from 'react';
+import escapeRegExp from 'escape-string-regexp';
+import sortBy from 'sort-by';
+import * as BooksAPI from './BooksAPI';
 
 class SearchBooksBar extends Component {
     state = {
-        query: ''
+        query: 'Android',
+        queryBooks: [],
+        books: []
     }
 
     updateQuery = (query) => {
-        this.setState({ query: query.trim() })
+        this.setState({ query: query })
+        this.getQueryBooks(query);
+    }
+
+    getQueryBooks = (query) => {
+        if (query) {
+            BooksAPI.search(query).then((queryBooks) => {
+                this.setState({ queryBooks })
+            })
+        }
+        else this.queryBooks = this.books;
     }
 
     render() {
-        let { books, addNewBook, showSearchPage } = this.props;
+        let { addNewBook, books } = this.props;
+        // this.setState({ queryBooks: books });
+        console.log("in SearchBooksBar displaying query books: " + this.state.queryBooks);
+
+        if (this.state.query) {
+            const match = new RegExp(escapeRegExp(this.state.query), 'i');
+            this.queryBooks = this.props.books.filter((book) =>
+                match.test(book.title) || match.test(book.author)
+            )
+        }
+
+        // displayBooks.sort();
+
         return (
             <div className="search-books">
                 <div className="search-books-bar">
-                    <a className="close-search" onClick={() => this.setState({ showSearchPage: true })}>Close</a>
+                    <a 
+                        className="close-search" 
+                        onClick={() => this.setState({ showSearchPage: false })}
+                        href="/">
+                        Close
+                    </a>
                     <div className="search-books-input-wrapper">
                         {/*
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -24,24 +56,23 @@ class SearchBooksBar extends Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                {JSON.stringify(this.state)}
                         <input 
                             type="text" 
                             placeholder="Search by title or author"
                             value={this.state.query}
-                            onChange={(event) => this.updateQuery(event.target.value)} 
+                            onChange={(event) => {this.updateQuery(event.target.value)}}
                             />
                     </div>
                 </div>
                 <div className="search-books-results">
                     <ol className="books-grid">
-                        {books.map((book) => (
+                        {this.state.queryBooks.map((book) => (
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
                                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: "url(" + book.imageLinks.thumbnail + ")" }}></div>
                                         <div className="book-shelf-changer">
-                                            <select onChange={event => addNewBook(book)} value={book.shelf}>
+                                            <select onChange={event => addNewBook(event.target.value)}>
                                                 <option value="move" disabled>Move to...</option>
                                                 <option value="currentlyReading">Currently Reading</option>
                                                 <option value="wantToRead">Want to Read</option>

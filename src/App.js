@@ -5,6 +5,7 @@ import MyReadsHeader from './MyReadsHeader';
 import CurrentlyReading from './CurrentlyReading';
 import WantToRead from './WantToRead';
 import Read from './Read';
+import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI';
 // import AddBookButton from './AddBookButton';
 
@@ -17,7 +18,9 @@ class BooksApp extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     books: [],
-    showSearchPage: false
+    queryBooks: [],
+    query: '',
+    showSearchPage: ''
   }
 
   componentDidMount() {
@@ -51,11 +54,17 @@ class BooksApp extends React.Component {
     })
   }
 
+  getNewBooks(query) {
+    BooksAPI.search(query).then((queryBooks) => {
+      this.setState({ queryBooks })
+    })
+  }
+
   render() {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <SearchBooksBar addNewBook={this.addNewBook} books={this.state.books} showSearchPage={this.state.showSearchPage}/>
+          <SearchBooksBar queryBooks={this.queryBooks} getNewBooks={this.getNewBooks} addNewBook={this.addNewBook} books={this.state.books}/>
         ) : (
           <div className="list-books">
             <MyReadsHeader/>
@@ -65,7 +74,11 @@ class BooksApp extends React.Component {
               <Read updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books}/>
             </div>
               <div className="open-search">
-                <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+                <a 
+                  onClick={() => this.setState({ showSearchPage: true })}
+                  href="#addBook">
+                  Add a book
+                </a>
               </div>
             {/* <AddBookButton showSearchPage={this.state.showSearchPage}/> */}
           </div>
