@@ -5,9 +5,9 @@ import * as BooksAPI from './BooksAPI';
 
 class SearchBooksBar extends Component {
     state = {
-        query: 'Android',
-        queryBooks: [],
-        books: []
+        query: '',
+        queryBooks: {},
+        matchedBooks: [],
     }
 
     updateQuery = (query) => {
@@ -21,23 +21,37 @@ class SearchBooksBar extends Component {
                 this.setState({ queryBooks })
             })
         }
-        else this.queryBooks = this.books;
+        // what to do if no book matches?
+        if (this.state.queryBooks.hasOwnProperty('error')) {
+            console.log('ERROR!');
+            this.setState({ matchedBooks: []})
+        }
+        else this.filterResults();
     }
 
-    render() {
-        let { addNewBook, books } = this.props;
-        // this.setState({ queryBooks: books });
-        console.log("in SearchBooksBar displaying query books: " + this.state.queryBooks);
-
+    filterResults() {
         if (this.state.query) {
             const match = new RegExp(escapeRegExp(this.state.query), 'i');
-            this.queryBooks = this.props.books.filter((book) =>
+            this.state.matchedBooks = this.state.queryBooks.filter((book) =>
                 match.test(book.title) || match.test(book.author)
             )
         }
+    }
+
+    render() {
+        let { addNewBook } = this.props;
+
+        // if (this.state.queryBooks.length === 0 || this.state.queryBooks === undefined) 
+        // if (this.state.query) {
+        //     const match = new RegExp(escapeRegExp(this.state.query), 'i');
+        //     this.state.matchedBooks = this.state.queryBooks.map((book) =>
+        //         match.test(book.title) || match.test(book.author)  
+        //     )
+        //     if (this.state.matchedBooks.length === 0) console.log(this.state.matchedBooks);
+        // } 
+
 
         // displayBooks.sort();
-
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -66,7 +80,10 @@ class SearchBooksBar extends Component {
                 </div>
                 <div className="search-books-results">
                     <ol className="books-grid">
-                        {this.state.queryBooks.map((book) => (
+                        {(this.state.matchedBooks.length === 0) ? (
+                            <p>No books found</p>
+                        ) : (
+                            this.state.matchedBooks.map((book) => (
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
@@ -84,7 +101,7 @@ class SearchBooksBar extends Component {
                                     <div className="book-authors">{book.author}</div>
                                 </div>
                             </li>
-                        ))}
+                        )))}
                     </ol>
                 </div>
             </div>
