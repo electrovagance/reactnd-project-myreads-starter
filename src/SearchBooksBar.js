@@ -41,16 +41,6 @@ class SearchBooksBar extends Component {
     render() {
         let { addNewBook } = this.props;
 
-        // if (this.state.queryBooks.length === 0 || this.state.queryBooks === undefined) 
-        // if (this.state.query) {
-        //     const match = new RegExp(escapeRegExp(this.state.query), 'i');
-        //     this.state.matchedBooks = this.state.queryBooks.map((book) =>
-        //         match.test(book.title) || match.test(book.author)  
-        //     )
-        //     if (this.state.matchedBooks.length === 0) console.log(this.state.matchedBooks);
-        // } 
-
-
         // displayBooks.sort();
         return (
             <div className="search-books">
