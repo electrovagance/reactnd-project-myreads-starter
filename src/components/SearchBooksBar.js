@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import escapeRegExp from 'escape-string-regexp';
 // import sortBy from 'sort-by';
-import * as BooksAPI from './BooksAPI';
+import * as BooksAPI from './../BooksAPI';
 
 class SearchBooksBar extends Component {
     state = {
         query: '',
         queryBooks: {},
         matchedBooks: [],
-        placeholder: '/../src/icons/placeholder.png'
+        placeholder: './src/icons/placeholder.png'
     }
 
     updateQuery = (query) => {
@@ -26,7 +26,7 @@ class SearchBooksBar extends Component {
         // what to do if no book matches?
         if (this.state.queryBooks.hasOwnProperty('error')) {
             console.log('ERROR!');
-            this.setState({ matchedBooks: []})
+            this.setState({ matchedBooks: []});
         }
         else this.filterResults();
     }
@@ -73,7 +73,7 @@ class SearchBooksBar extends Component {
                                 <div className="book">
                                     <div className="book-top">
                                         <div className="book-cover" style={{ width: 128, height: 193, 
-                                            backgroundImage: "url(" + (book.imageLinks.thumbnail.smallThumbnail) ? book.imageLinks.thumbnail : this.placeholder  + ")" }}></div>
+                                                    backgroundImage: "url(" + book.imageLinks.thumbnail + ")" }}></div>
                                         <div className="book-shelf-changer">
                                             <select onChange={event => addNewBook(book, event.target.value)}>
                                                 <option value="move" disabled>Move to...</option>
