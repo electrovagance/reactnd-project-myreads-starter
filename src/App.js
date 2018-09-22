@@ -39,23 +39,28 @@ class BooksApp extends React.Component {
     }))
   }
 
+  // addNewBook = (bookToAdd) => {
+  //   this.setState((state) => books: state.books.push(bookToAdd))
+  // }
+
+  addNewBook = (bookToAdd, shelfName) => {
+    bookToAdd.shelf = shelfName;
+    console.log(bookToAdd);
+    this.setState((state) => this.state.books.push(bookToAdd))
+    }
+  
+  getNewBooks(query) {
+    BooksAPI.search(query).then((queryBooks) => {
+      this.setState({ queryBooks })
+    })
+  }
+
   deleteBook = (bookToDelete) => {
     this.setState((state) => {
       books: state.books.filter((b) => b !== bookToDelete)
     })
   }
 
-  addNewBook = (bookToAdd) => {
-    this.setState((state) => {
-      books: state.books.push(bookToAdd)
-    })
-  }
-
-  getNewBooks(query) {
-    BooksAPI.search(query).then((queryBooks) => {
-      this.setState({ queryBooks })
-    })
-  }
 
   render() {
     return (
@@ -67,10 +72,10 @@ class BooksApp extends React.Component {
               <CurrentlyReading updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books} />
               <WantToRead updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books} />
               <Read updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books} />
+              <AddBookButton />
             </div>
             )
           }/>
-          <AddBookButton/>
 
           <Route path="/search" render={() => (
             <SearchBooksBar addNewBook={this.addNewBook}/>

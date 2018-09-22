@@ -23,7 +23,6 @@ class SearchBooksBar extends Component {
                 this.setState({ queryBooks })
             })
         }
-        console.log(this.queryBooks);
         // what to do if no book matches?
         if (this.state.queryBooks.hasOwnProperty('error')) {
             console.log('ERROR!');
@@ -35,13 +34,13 @@ class SearchBooksBar extends Component {
     filterResults() {
         if (this.state.query) {
             const match = new RegExp(escapeRegExp(this.state.query), 'i');
-            this.setState.matchedBooks = this.state.queryBooks.filter((book) =>
-                match.test(book.title) || match.test(book.author)
-            )
+            this.setState({
+                matchedBooks: this.state.queryBooks.filter((book) =>
+                    match.test(book.title) || match.test(book.author)
+                ) 
+            })
         }
     }
-
-    
 
     render() {
         let { addNewBook } = this.props;
@@ -56,14 +55,6 @@ class SearchBooksBar extends Component {
                         Close
                     </Link>
                     <div className="search-books-input-wrapper">
-                        {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
                         <input 
                             type="text" 
                             placeholder="Search by title or author"
@@ -81,9 +72,10 @@ class SearchBooksBar extends Component {
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
-                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: "url(" + (book.imageLinks.thumbnail) ? book.imageLinks.thumbnail : this.placeholder  + ")" }}></div>
+                                        <div className="book-cover" style={{ width: 128, height: 193, 
+                                            backgroundImage: "url(" + (book.imageLinks.thumbnail.smallThumbnail) ? book.imageLinks.thumbnail : this.placeholder  + ")" }}></div>
                                         <div className="book-shelf-changer">
-                                            <select onChange={event => addNewBook(event.target.value)}>
+                                            <select onChange={event => addNewBook(book, event.target.value)}>
                                                 <option value="move" disabled>Move to...</option>
                                                 <option value="currentlyReading">Currently Reading</option>
                                                 <option value="wantToRead">Want to Read</option>
