@@ -12,7 +12,9 @@ class WantToRead extends Component {
         books = showingBooks;
 
         return (
-            <div className="bookshelf">
+            <div className="list-books">
+                <div className="list-books-content">
+                    <div className="bookshelf">
                 <h2 className="bookshelf-title">Want to Read</h2>
                 <div className="bookshelf-books">
                     <ol className="books-grid">
@@ -39,7 +41,8 @@ class WantToRead extends Component {
                     </ol>
                 </div>
             </div>
-            
+                </div>
+            </div>
         )
     }
 

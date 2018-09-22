@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import escapeRegExp from 'escape-string-regexp';
-import sortBy from 'sort-by';
+// import sortBy from 'sort-by';
 import * as BooksAPI from './BooksAPI';
 
 class SearchBooksBar extends Component {
@@ -8,6 +9,7 @@ class SearchBooksBar extends Component {
         query: '',
         queryBooks: {},
         matchedBooks: [],
+        placeholder: '/../src/icons/placeholder.png'
     }
 
     updateQuery = (query) => {
@@ -21,6 +23,7 @@ class SearchBooksBar extends Component {
                 this.setState({ queryBooks })
             })
         }
+        console.log(this.queryBooks);
         // what to do if no book matches?
         if (this.state.queryBooks.hasOwnProperty('error')) {
             console.log('ERROR!');
@@ -32,11 +35,13 @@ class SearchBooksBar extends Component {
     filterResults() {
         if (this.state.query) {
             const match = new RegExp(escapeRegExp(this.state.query), 'i');
-            this.state.matchedBooks = this.state.queryBooks.filter((book) =>
+            this.setState.matchedBooks = this.state.queryBooks.filter((book) =>
                 match.test(book.title) || match.test(book.author)
             )
         }
     }
+
+    
 
     render() {
         let { addNewBook } = this.props;
@@ -45,12 +50,11 @@ class SearchBooksBar extends Component {
         return (
             <div className="search-books">
                 <div className="search-books-bar">
-                    <a 
+                    <Link 
                         className="close-search" 
-                        onClick={() => this.setState({ showSearchPage: false })}
-                        href="/">
+                        to="/">
                         Close
-                    </a>
+                    </Link>
                     <div className="search-books-input-wrapper">
                         {/*
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -77,7 +81,7 @@ class SearchBooksBar extends Component {
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
-                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: "url(" + book.imageLinks.thumbnail + ")" }}></div>
+                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: "url(" + (book.imageLinks.thumbnail) ? book.imageLinks.thumbnail : this.placeholder  + ")" }}></div>
                                         <div className="book-shelf-changer">
                                             <select onChange={event => addNewBook(event.target.value)}>
                                                 <option value="move" disabled>Move to...</option>

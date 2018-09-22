@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class CurrentlyReading extends Component {
     state = {
-        books: ''
+        books: '',
     }
 
 
@@ -13,7 +13,9 @@ class CurrentlyReading extends Component {
         books = showingBooks;
 
         return (
-            <div className="bookshelf">
+            <div className="list-books">
+                <div className="list-books-content">
+                    <div className="bookshelf">
                 <h2 className="bookshelf-title">Currently Reading</h2>
                 <div className="bookshelf-books">
                     <ol className="books-grid">
@@ -21,7 +23,8 @@ class CurrentlyReading extends Component {
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
-                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: "url(" + book.imageLinks.thumbnail + ")" }}></div>
+                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 
+                                                    "url(" + book.imageLinks.thumbnail + ")" }}></div>
                                         <div className="book-shelf-changer">
                                             <select onChange={event => updateShelf(event.target.value, book)} value={book.shelf} >
                                                 <option value="move" disabled>Move to...</option>
@@ -38,6 +41,8 @@ class CurrentlyReading extends Component {
                             </li>
                         ))}
                     </ol>
+                </div>
+            </div>
                 </div>
             </div>
         )

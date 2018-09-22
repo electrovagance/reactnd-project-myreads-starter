@@ -12,7 +12,9 @@ class Read extends Component {
         books = showingBooks;
 
         return (
-            <div className="bookshelf">
+            <div className="list-books">
+                <div className="list-books-content">
+                    <div className="bookshelf">
                 <h2 className="bookshelf-title">Read</h2>
                 <div className="bookshelf-books">
                     <ol className="books-grid">
@@ -37,6 +39,8 @@ class Read extends Component {
                             </li>
                         ))}
                     </ol>
+                </div>
+            </div>
                 </div>
             </div>
         )

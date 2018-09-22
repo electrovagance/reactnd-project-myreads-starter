@@ -5,9 +5,9 @@ import MyReadsHeader from './MyReadsHeader';
 import CurrentlyReading from './CurrentlyReading';
 import WantToRead from './WantToRead';
 import Read from './Read';
-import { Link } from 'react-router-dom'
+import AddBookButton from './AddBookButton';
+import { Route } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI';
-// import AddBookButton from './AddBookButton';
 
 class BooksApp extends React.Component {
   state = {
@@ -17,10 +17,7 @@ class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    books: [],
-    queryBooks: [],
-    query: '',
-    showSearchPage: ''
+    books: []
   }
 
   componentDidMount() {
@@ -62,28 +59,24 @@ class BooksApp extends React.Component {
 
   render() {
     return (
-      <div className="app">
-        {this.state.showSearchPage ? (
-          <SearchBooksBar queryBooks={this.queryBooks} getNewBooks={this.getNewBooks} addNewBook={this.addNewBook} books={this.state.books}/>
-        ) : (
-          <div className="list-books">
-            <MyReadsHeader/>
-            <div className="list-books-content">
-              <CurrentlyReading updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books}/>
-              <WantToRead updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books}/>
-              <Read updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books}/>
+        <div className="app">
+
+          <Route exact path="/" render={() => (
+            <div>
+              <MyReadsHeader />
+              <CurrentlyReading updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books} />
+              <WantToRead updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books} />
+              <Read updateShelf={this.updateShelf} deleteBook={this.deleteBook} books={this.state.books} />
             </div>
-              <div className="open-search">
-                <a 
-                  onClick={() => this.setState({ showSearchPage: true })}
-                  href="#addBook">
-                  Add a book
-                </a>
-              </div>
-            {/* <AddBookButton showSearchPage={this.state.showSearchPage}/> */}
-          </div>
-        )}
-      </div>
+            )
+          }/>
+          <AddBookButton/>
+
+          <Route path="/search" render={() => (
+            <SearchBooksBar addNewBook={this.addNewBook}/>
+          )}/>
+
+        </div>
     )
   }
 }
