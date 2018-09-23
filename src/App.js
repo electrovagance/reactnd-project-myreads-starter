@@ -32,10 +32,26 @@ class BooksApp extends React.Component {
       })
     }))
   }
+
   addNewBook = (bookToAdd, shelfName) => {
-    bookToAdd.shelf = shelfName;
-    this.setState((state) => this.state.books.push(bookToAdd))
+    // loop over books to find if the new book to be added is already on a shelf
+    let duplicateBook = this.state.books.map(book => book.id === bookToAdd.id);
+    // if matching book was found, save true in duplicate book
+    duplicateBook = duplicateBook.filter(result => result === true);
+    
+    if (duplicateBook[0] === true) {
+      alert("Duplicate book in list found! Return and change the book's shelf.")
     }
+    else { 
+      bookToAdd.shelf = shelfName;
+      this.setState((state) => this.state.books.push(bookToAdd))
+    }
+
+    BooksAPI.update(bookToAdd, shelfName).then((queryBooks) => {
+      this.setState({ queryBooks })
+    })
+    
+  }
   
   getNewBooks(query) {
     BooksAPI.search(query).then((queryBooks) => {
@@ -66,7 +82,7 @@ class BooksApp extends React.Component {
           }/>
 
           <Route path="/search" render={() => (
-            <SearchBooksBar addNewBook={this.addNewBook}/>
+            <SearchBooksBar addNewBook={this.addNewBook} booksOnShelf={this.books}/>
           )}/>
 
         </div>
