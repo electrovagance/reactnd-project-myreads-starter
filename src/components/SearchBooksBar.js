@@ -4,10 +4,17 @@ import escapeRegExp from 'escape-string-regexp';
 import * as BooksAPI from './../BooksAPI';
 
 class SearchBooksBar extends Component {
-    state = {
-        query: '',
-        queryBooks: {},
-        matchedBooks: []
+    constructor(props) {
+        super(props);
+        this.state = ({
+                    query: '',
+                    books: [],
+                    shelvedBooks: props.books
+                })
+    }
+
+    componentWillMount() {
+        this.setState({ shelvedBooks: this.props.books })
     }
 
     updateQuery = (query) => {
@@ -17,52 +24,39 @@ class SearchBooksBar extends Component {
 
     getQueryBooks = (query) => {
         if (query) {
-            BooksAPI.search(query).then((queryBooks) => {
-                this.setState({ queryBooks })
+            let temp = '';
+            BooksAPI.search(query).then((books) => {
+                temp = books;
+            }).then(() => {
+                if (temp.error === "empty query") this.setState({ books: [] });
+                else {
+                    console.log(temp)
+                    // comparing results with books on already on shelves
+                    this.state.shelvedBooks.map(b1 => {
+                        temp.map(b2 => {
+                            if (b1.id === b2.id) b2.shelf = b1.shelf;
+                        })
+                    })
+
+                    // this.setState((state) => {
+                    //     return { books: state.books.filter(books => books.id !== temp.id) }
+                    // })
+                    this.setState({ books: temp})
+                    this.filterResults();
+                }
             })
         }
-        // what to do if no book matches?
-        if (this.state.queryBooks.hasOwnProperty('error')) {
-            console.log('ERROR!');
-            this.setState({ matchedBooks: []});
-        }
-        else this.filterResults();
     }
+    
 
     filterResults() {
-        if (this.state.query) {
-            // checking if queryBooks array is empty
-            if (this.state.queryBooks.hasOwnProperty('id') !== false) console.log(this.state.queryBooks.hasOwnProperty('id')); 
-            else {
-                const match = new RegExp(escapeRegExp(this.state.query), 'i');
-                // match query with book title or book author
-                this.setState({
-                    matchedBooks: this.state.queryBooks.filter((book) =>
-                        match.test(book.title) || match.test(book.author)
-                    )
-                })
-            }
-        }
-    }
-
-    addNewBook = (bookToAdd, shelfName) => {
-        // loop over books to find if the new book to be added is already on a shelf
-        let duplicateBook = this.state.books.map(book => book.id === bookToAdd.id);
-        // if matching book was found, save true in duplicate book
-        duplicateBook = duplicateBook.filter(result => result === true);
-
-        if (duplicateBook[0] === true) {
-            alert("Duplicate book in list found! Return and change the book's shelf.")
-        }
-        else {
-            bookToAdd.shelf = shelfName;
-            this.setState((state) => this.state.books.push(bookToAdd))
-        }
-
-        BooksAPI.update(bookToAdd, shelfName).then((response) => {
-            this.setState({ currentBooks: this.state.queryBooks.push(bookToAdd)})
+        const match = new RegExp(escapeRegExp(this.state.query), 'i');
+        // match query with book title or book author
+        this.setState((state) => {
+            this.state.books.filter((book) =>
+                match.test(book.title) || match.test(book.authors)
+            )
         })
-
     }
 
     render() {
@@ -85,21 +79,24 @@ class SearchBooksBar extends Component {
                 </div>
                 <div className="search-books-results">
                     <ol className="books-grid">
-                        {(this.state.matchedBooks.length === 0) ? (
+                        {(this.state.books.length === 0) ? (
                             <p>No books found</p>
                         ) : (
-                            this.state.matchedBooks.map((book) => (
+                            this.state.books.map((book) => (
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
                                         <div className="book-cover" style={{ width: 128, height: 193, 
                                                     backgroundImage: "url(" + book.imageLinks.thumbnail + ")" }}></div>
                                         <div className="book-shelf-changer">
-                                                <select onChange={event => this.addNewBook(book, event.target.value)} value={book.shelf}>
+                                                <select onChange={event => {
+                                                    this.props.changeShelf(book, event.target.value)}}
+                                                    value={book.shelf || "none"}>
                                                 <option value="move" disabled>Move to...</option>
                                                 <option value="currentlyReading">Currently Reading</option>
                                                 <option value="wantToRead">Want to Read</option>
                                                 <option value="read">Read</option>
+                                                <option value="none">None</option>
                                             </select>
                                         </div>
                                     </div>
