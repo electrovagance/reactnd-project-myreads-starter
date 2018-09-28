@@ -33,24 +33,11 @@ class BooksApp extends React.Component {
     )
   }
   
-  // addNewBook = (bookToAdd, shelfName) => {
-  //   // loop over books to find if the new book to be added is already on a shelf
-  //   let duplicateBook = this.state.books.map(book => book.id === bookToAdd.id);
-  //   // if matching book was found, save true in duplicate book
-  //   duplicateBook = duplicateBook.filter(result => result === true);
-    
-  //   if (duplicateBook[0] === true) {
-  //     alert("Duplicate book in list found! Return and change the book's shelf.")
+  // componentDidUpdate(prevState) {
+  //   // Typical usage (don't forget to compare props):
+  //   if (this.state.books !== prevState.books) {
+  //     this.setState({ books: this.props.books })
   //   }
-  //   else { 
-  //     bookToAdd.shelf = shelfName;
-  //     this.setState((state) => this.state.books.push(bookToAdd))
-  //   }
-
-  //   BooksAPI.update(bookToAdd, shelfName).then((queryBooks) => {
-  //     this.setState({ queryBooks })
-  //   })
-    
   // }
 
   render() {
