@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
 
-class AddBookButton extends Component {
+class AddBookButton extends PureComponent {
     render() {
         return (
             <div className="open-search">
