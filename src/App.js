@@ -23,21 +23,14 @@ class BooksApp extends React.Component {
     })
   }
 
-  changeShelf(book, shelf) {
-    // update selected book by calling the BooksAPI update function
-    // and then call BooksAPI getAll method again
-    BooksAPI.update(book, shelf).then(() => {
-      this.componentDidMount()
-      }
-    )
-  }
-  
-  // componentDidUpdate(prevState) {
-  //   // Typical usage (don't forget to compare props):
-  //   if (this.state.books !== prevState.books) {
-  //     this.setState({ books: this.props.books })
-  //   }
-  // }
+  changeShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf);
+    book.shelf = shelf;
+
+    this.setState(state => ({
+      books: state.books.filter(b => b.id !== book.id).concat(book),
+    }));
+  } 
 
   render() {
 
