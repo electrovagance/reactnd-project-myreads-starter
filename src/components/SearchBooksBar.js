@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import escapeRegExp from 'escape-string-regexp';
 import * as BooksAPI from './../BooksAPI';
-
+import { DebounceInput } from 'react-debounce-input';
 
 class SearchBooksBar extends Component {
     constructor(props) {
@@ -31,7 +31,6 @@ class SearchBooksBar extends Component {
             }).then(() => {
                 if (temp.error === "empty query") this.setState({ books: [] });
                 else {
-                    console.log(temp)
                     // comparing results with books on already on shelves
                     this.state.shelvedBooks.map(b1 => {
                         temp.map(b2 => {
@@ -66,7 +65,9 @@ class SearchBooksBar extends Component {
                         Close
                     </Link>
                     <div className="search-books-input-wrapper">
-                        <input 
+                        <DebounceInput
+                            minLength={1}
+                            debounceTimeout={300}
                             type="text" 
                             placeholder="Search by title or author"
                             value={this.state.query}
