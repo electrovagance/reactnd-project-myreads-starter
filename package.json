@@ -9,12 +9,15 @@
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
+    "gh-pages": "^2.0.0",
     "react-scripts": "1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
+    "eject": "react-scripts eject",
+    "deploy": "npm run build&&gh-pages -d build"
+  },
+  "homepage": "https://electrovagance.github.io/reactnd-project-myreads-starter"
 }

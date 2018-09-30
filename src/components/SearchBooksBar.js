@@ -19,9 +19,19 @@ class SearchBooksBar extends Component {
     }
 
     updateQuery = (query) => {
-        this.setState({ query: query })
+        this.setState({ query })
+        console.log(this.state.query)
         this.getQueryBooks(query);
     }
+
+    // checkForBackspaceOrDelete = (e) => {
+    //     if (e === "Backspace" || e === "Delete") {
+    //         this.setState(state => {
+    //             query: state.query.substring(0, state.query.length - 1)
+    //         })
+    //     }
+    //     console.log(this.state.query)
+    // }
 
     getQueryBooks = (query) => {
         if (query) {
@@ -42,6 +52,7 @@ class SearchBooksBar extends Component {
                 }
             })
         }
+        else this.setState({ books: [] })
     }
     
 
@@ -66,12 +77,12 @@ class SearchBooksBar extends Component {
                     </Link>
                     <div className="search-books-input-wrapper">
                         <DebounceInput
-                            minLength={1}
+                            minLength={0}
                             debounceTimeout={300}
                             type="text" 
                             placeholder="Search by title or author"
                             value={this.state.query}
-                            onChange={(event) => {this.updateQuery(event.target.value)}}
+                            onChange={(event) => { this.updateQuery(event.target.value)}}
                             />
                     </div>
                 </div>
